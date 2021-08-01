@@ -5,7 +5,7 @@ from django.conf import settings
 from payment_processor.daemon_api_wrapper.bitcoin import BitcoinAPIWrapper
 from payment_processor.daemon_api_wrapper.dogecoin import DogeCoinAPIWrapper
 from payment_processor.daemon_api_wrapper.monero import MoneroAPIWrapper
-from payment_processor.daemon_api_wrapper.ethereum import EthereumAPIWrapper
+# from payment_processor.daemon_api_wrapper.ethereum import EthereumAPIWrapper
 
 # NOTE: In future we might modify the daemons to listen on zmq and process
 # raw tx data from there
@@ -36,5 +36,5 @@ class PaymentProcessorConfig(AppConfig):
             settings.MONERO_WALLET_RPC_PASSWORD
         )
         self.api_wrappers['monero'].check_wallet_loaded()
-        self.api_wrappers['ethereum'] = EthereumAPIWrapper(
-            settings.ETHEREUM_DAEMON_HOST)
+        # self.api_wrappers['ethereum'] = EthereumAPIWrapper(
+        #     settings.ETHEREUM_DAEMON_HOST)
