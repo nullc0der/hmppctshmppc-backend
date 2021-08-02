@@ -10,6 +10,8 @@ from payment_processor.daemon_api_wrapper.monero import MoneroAPIWrapper
 # NOTE: In future we might modify the daemons to listen on zmq and process
 # raw tx data from there
 
+# TODO: VVI: Need to work on docker networking, it is not properly configured
+
 
 class PaymentProcessorConfig(AppConfig):
     name = 'payment_processor'
