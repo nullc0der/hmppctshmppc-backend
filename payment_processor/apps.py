@@ -1,8 +1,8 @@
 from typing import Dict, Optional, Any
 from django.apps import AppConfig
-# from django.conf import settings
+from django.conf import settings
 
-# from payment_processor.daemon_api_wrapper.bitcoin import BitcoinAPIWrapper
+from payment_processor.daemon_api_wrapper.bitcoin import BitcoinAPIWrapper
 # from payment_processor.daemon_api_wrapper.dogecoin import DogeCoinAPIWrapper
 # from payment_processor.daemon_api_wrapper.monero import MoneroAPIWrapper
 # from payment_processor.daemon_api_wrapper.ethereum import EthereumAPIWrapper
@@ -21,12 +21,11 @@ class PaymentProcessorConfig(AppConfig):
         self.api_wrappers: Dict = {}
 
     def ready(self) -> None:
-        pass
-        # self.api_wrappers['bitcoin'] = BitcoinAPIWrapper(
-        #     settings.BITCOIN_DAEMON_HOST,
-        #     settings.BITCOIN_WALLET_RPC_USERNAME,
-        #     settings.BITCOIN_WALLET_RPC_PASSWORD)
-        # self.api_wrappers['bitcoin'].check_wallet_loaded()
+        self.api_wrappers['bitcoin'] = BitcoinAPIWrapper(
+            settings.BITCOIN_DAEMON_HOST,
+            settings.BITCOIN_WALLET_RPC_USERNAME,
+            settings.BITCOIN_WALLET_RPC_PASSWORD)
+        self.api_wrappers['bitcoin'].check_wallet_loaded()
         # self.api_wrappers['dogecoin'] = DogeCoinAPIWrapper(
         #     settings.DOGECOIN_DAEMON_HOST,
         #     settings.DOGECOIN_WALLET_RPC_USERNAME,
