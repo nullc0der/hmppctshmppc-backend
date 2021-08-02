@@ -175,11 +175,12 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'clean_access_token': {
         'task': 'core_api.tasks.task_clean_access_token',
-        'schedule': crontab()
+        # NOTE: Need to check whether running at midnight is sufficient
+        'schedule': crontab(minute=0, hour=0)
     },
     'clean_unused_payments': {
         'task': 'payment_processor.tasks.task_clean_unused_payments',
-        'schedule': crontab()
+        'schedule': crontab(minute=0, hour=0)
     }
 }
 
