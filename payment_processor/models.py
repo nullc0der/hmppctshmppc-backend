@@ -24,3 +24,6 @@ class Payment(models.Model):
 
     def get_tx_ids_as_json(self):
         return json.loads(self.tx_ids)
+
+    def __str__(self) -> str:
+        return f'{self.currency} - {self.payment_id}'
