@@ -151,6 +151,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'public')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Rest Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+    ]
+}
+
 # Site type
 
 SITE_TYPE = get_env_var('SITE_TYPE')
