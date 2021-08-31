@@ -1,11 +1,14 @@
 import json
 from decimal import Decimal
-from typing import Any, Dict, List, Tuple, Union
-from django.conf import settings
+from typing import Any, Dict, List, Tuple, Union, Optional
 
+import requests
+
+from django.conf import settings
 from django.utils.timezone import now, timedelta
 from django.utils.crypto import get_random_string
 from django.apps import apps
+from django.core.cache import cache
 
 from payment_processor.models import Payment
 from payment_processor.constants import TX_FIELDS_TO_CHECK, TX_FIELDS_TO_SAVE
@@ -46,11 +49,13 @@ def create_payment(currency: str) -> Dict[str, str]:
         payment.save()
         return {
             'payment_id': payment.payment_id,
-            'wallet_address': payment.wallet_address
+            'wallet_address': payment.wallet_address,
+            'per_usd_amount': get_per_usd_currency_amount(currency)
         }
     return {
         'payment_id': '',
-        'wallet_address': ''
+        'wallet_address': '',
+        'per_usd_amount': 0
     }
 
 
@@ -131,3 +136,25 @@ def clean_unused_payments():
     for payment in Payment.objects.filter(tx_ids__isnull=True):
         if payment.created_on + timedelta(days=3) < now():
             payment.delete()
+
+
+def sync_currency_price():
+    """
+    This function will sync and cache the coin prices from coingecko api
+    """
+    data = {}
+    for currency in ['bitcoin', 'dogecoin', 'monero']:
+        res = requests.get(
+            'https://api.coingecko.com/api/v3/simple/'
+            f'price?ids={currency}&vs_currencies=usd')
+        if res.status_code == 200:
+            data[currency] = res.json().get(currency, {})
+    cache.set('currency_price', data, None)
+
+
+def get_per_usd_currency_amount(currency_name: str) -> Optional[float]:
+    currency_prices = cache.get('currency_price')
+    if currency_prices:
+        currency_price = currency_prices[currency_name].get('usd')
+        if currency_price:
+            return "%.6f" % (1 / currency_price)

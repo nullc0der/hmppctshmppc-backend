@@ -214,6 +214,17 @@ python-versions = ">=3.6"
 Django = ">=2.2"
 
 [[package]]
+name = "django-redis-cache"
+version = "3.0.0"
+description = "Redis Cache Backend for Django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+redis = "<4.0"
+
+[[package]]
 name = "djangorestframework"
 version = "3.12.4"
 description = "Web APIs for Django, made easy."
@@ -606,7 +617,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "79d84c275ffad1595d903a7c9a57934ca11a9dfbf8e6a41ba4f0d13ee8a7a4fd"
+content-hash = "e4473c183ae7a2164196fbceebddfb477ec56dca8b2a545afc490033960878cd"
 
 [metadata.files]
 amqp = [
@@ -674,6 +685,9 @@ django = [
 django-cors-headers = [
     {file = "django-cors-headers-3.7.0.tar.gz", hash = "sha256:96069c4aaacace786a34ee7894ff680780ec2644e4268b31181044410fecd12e"},
     {file = "django_cors_headers-3.7.0-py3-none-any.whl", hash = "sha256:1ac2b1213de75a251e2ba04448da15f99bcfcbe164288ae6b5ff929dc49b372f"},
+]
+django-redis-cache = [
+    {file = "django-redis-cache-3.0.0.tar.gz", hash = "sha256:9a2eebef421d996a82098a19d17ff6b321265cd73178fa398913019764e8394a"},
 ]
 djangorestframework = [
     {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},

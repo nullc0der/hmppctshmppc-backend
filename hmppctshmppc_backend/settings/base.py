@@ -150,6 +150,15 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'redis://' + get_env_var('REDIS_HOST') + ':6379/1'
+    }
+}
+
 # Rest Framework
 
 REST_FRAMEWORK = {
@@ -189,6 +198,10 @@ CELERY_BEAT_SCHEDULE = {
     'clean_unused_payments': {
         'task': 'payment_processor.tasks.task_clean_unused_payments',
         'schedule': crontab(minute=0, hour=0)
+    },
+    'sync_currency_price': {
+        'task': 'payment_processor.tasks.task_sync_currency_price',
+        'schedule': crontab(minute='*/5')
     }
 }
 
