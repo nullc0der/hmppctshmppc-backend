@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import Any, Dict, List, Tuple, Union, Optional
 
 import requests
+from requests.exceptions import ConnectionError as RequestConnectionError
 
 from django.conf import settings
 from django.utils.timezone import now, timedelta
@@ -144,11 +145,16 @@ def sync_currency_price():
     """
     data = {}
     for currency in ['bitcoin', 'dogecoin', 'monero']:
-        res = requests.get(
-            'https://api.coingecko.com/api/v3/simple/'
-            f'price?ids={currency}&vs_currencies=usd')
-        if res.status_code == 200:
-            data[currency] = res.json().get(currency, {})
+        try:
+            res = requests.get(
+                'https://api.coingecko.com/api/v3/simple/'
+                f'price?ids={currency}&vs_currencies=usd')
+            if res.status_code == 200:
+                data[currency] = res.json().get(currency, {})
+            else:
+                data[currency] = {}
+        except RequestConnectionError:
+            data[currency] = {}
     cache.set('currency_price', data, None)
 
 
