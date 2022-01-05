@@ -2,13 +2,13 @@ import json
 
 from django.db import models
 
-from payment_processor.models import Payment
+from ekatagp.models import PaymentForm
 
 # Create your models here.
 
 
 class StatsSnapshot(models.Model):
-    payment = models.OneToOneField(Payment, on_delete=models.CASCADE)
+    payment_form = models.OneToOneField(PaymentForm, on_delete=models.CASCADE)
     stats = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
 

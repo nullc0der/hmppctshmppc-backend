@@ -3,7 +3,7 @@ import json
 from django.utils.crypto import get_random_string
 from django.utils.timezone import timedelta, now
 
-from payment_processor.models import Payment
+from ekatagp.models import PaymentForm
 
 from core_api.models import StatsSnapshot, AccessToken
 
@@ -15,8 +15,8 @@ def get_unique_access_token():
     return access_token
 
 
-def create_stats_snapshot(payment_id: str):
-    payment = Payment.objects.get(payment_id=payment_id)
+def create_stats_snapshot(payment_form_id: str):
+    payment_form = PaymentForm.objects.get(form_id=payment_form_id)
     stats = {
         'total_payment_count': 1,
         'bitcoin_payment_count': 0,
@@ -26,11 +26,13 @@ def create_stats_snapshot(payment_id: str):
         'monero_payment_count': 0,
         'polkadot_payment_count': 0,
     }
-    stats[f'{payment.currency}_payment_count'] = 1
-    for p in Payment.objects.filter(tx_ids__isnull=False):
+    for p in PaymentForm.objects.filter(is_payment_success=True):
+        payment_payload = p.get_payment_payload_as_json()
+        currency_name = payment_payload['currency_name']
         stats['total_payment_count'] += 1
-        stats[f'{p.currency}_payment_count'] += 1
-    StatsSnapshot.objects.create(payment=payment, stats=json.dumps(stats))
+        stats[f'{currency_name}_payment_count'] += 1
+    StatsSnapshot.objects.create(
+        payment_form=payment_form, stats=json.dumps(stats))
 
 
 def get_or_create_access_token(stats_snapshot: StatsSnapshot) -> str:
