@@ -198,10 +198,6 @@ CELERY_BEAT_SCHEDULE = {
     'clean_unused_payments': {
         'task': 'payment_processor.tasks.task_clean_unused_payments',
         'schedule': crontab(minute=0, hour=0)
-    },
-    'sync_currency_price': {
-        'task': 'payment_processor.tasks.task_sync_currency_price',
-        'schedule': crontab(minute='*/5')
     }
 }
 
