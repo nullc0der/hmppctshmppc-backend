@@ -194,10 +194,6 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'core_api.tasks.task_clean_access_token',
         # NOTE: Need to check whether running at midnight is sufficient
         'schedule': crontab(minute=0, hour=0)
-    },
-    'clean_unused_payments': {
-        'task': 'payment_processor.tasks.task_clean_unused_payments',
-        'schedule': crontab(minute=0, hour=0)
     }
 }
 
